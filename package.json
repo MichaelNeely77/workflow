@@ -20,5 +20,9 @@
   "bugs": {
     "url": "https://github.com/MichaelNeely77/workflow/issues"
   },
-  "homepage": "https://github.com/MichaelNeely77/workflow#readme"
+  "homepage": "https://github.com/MichaelNeely77/workflow#readme",
+  "devDependencies": {
+    "gulp": "^4.0.2",
+    "gulp-sass": "^4.0.2"
+  }
 }
