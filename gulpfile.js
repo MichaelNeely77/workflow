@@ -1,7 +1,7 @@
 const gulp = require('gulp');
 const sass = require('gulp-sass');
 const  browserSync = require('browser-sync');
-const watch = require('gulp');
+const autoprefixer = require('gulp-autoprefixer');
 const reload = browserSync.reload;
 
 const SOURCEPATHS = {
@@ -17,8 +17,9 @@ const APPPATH = {
 
 gulp.task('sass', function() {
     return gulp.src(SOURCEPATHS.sassSource)
+        .pipe(autoprefixer())
         .pipe(sass({outputStyle: 'expanded'}).on('error', sass.logError))
-        .pipe(gulp.dest(APPPATH.css));
+        .pipe(gulp.dest(APPPATH.css))
 });
 
 gulp.task('serve', function() {
@@ -29,13 +30,25 @@ gulp.task('serve', function() {
     })
 });
 
-gulp.task('watch', function() {
-    gulp.watch([SOURCEPATHS.sassSource]);
-});
+// gulp.task('watch', function() {
+//     gulp.watch([SOURCEPATHS.sassSource]);
+// });
 
-gulp.task('default', gulp.series('sass', 'serve', 'watch', function() {
+// watch([SOURCEPATHS.sassSource], ['serve', 'sass']);
+
+gulp.task('default', gulp.series('sass', 'serve', function() {
 
 }));
 
+function watchTask() {
+    watchTask(
+        [SOURCEPATHS.sassSource],
+        parallel('serve', 'sass')
+    );
+}
+
+exports.default = series(
+    parallel(watchTask)
+);
 
 
