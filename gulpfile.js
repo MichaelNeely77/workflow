@@ -1,6 +1,7 @@
 const gulp = require('gulp');
 const sass = require('gulp-sass');
 const  browserSync = require('browser-sync');
+const watch = require('gulp');
 const reload = browserSync.reload;
 
 const SOURCEPATHS = {
@@ -28,7 +29,11 @@ gulp.task('serve', function() {
     })
 });
 
-gulp.task('default', gulp.series('sass', 'serve', function() {
+gulp.task('watch', function() {
+    gulp.watch([SOURCEPATHS.sassSource]);
+});
+
+gulp.task('default', gulp.series('sass', 'serve', 'watch', function() {
 
 }));
 
