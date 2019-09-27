@@ -1,8 +1,10 @@
 const gulp = require('gulp');
 const sass = require('gulp-sass');
-const  browserSync = require('browser-sync');
+const  browsersync = require('browser-sync');
 const autoprefixer = require('gulp-autoprefixer');
-const reload = browserSync.reload;
+const reload = browsersync.reload;
+const { series } = require('gulp');
+const { watch } = require('gulp');
 
 const SOURCEPATHS = {
     
@@ -14,41 +16,62 @@ const APPPATH = {
     css : 'app/css',
     js : 'app/js'
 }
+// Works
+// gulp.task('sass', function() {
+//     return gulp.src(SOURCEPATHS.sassSource)
+//         .pipe(autoprefixer())
+//         .pipe(sass({outputStyle: 'expanded'}).on('error', sass.logError))
+//         .pipe(gulp.dest(APPPATH.css))
+// });
 
-gulp.task('sass', function() {
+
+function compileSass() {
     return gulp.src(SOURCEPATHS.sassSource)
         .pipe(autoprefixer())
         .pipe(sass({outputStyle: 'expanded'}).on('error', sass.logError))
         .pipe(gulp.dest(APPPATH.css))
-});
+}
 
-gulp.task('serve', function() {
-    browserSync.init([APPPATH.css + '/*.css', APPPATH.root + '/*.html', APPPATH.js + '/*.js'], {
+
+// Works
+// gulp.task('serve', function() {
+//     browsersync.init([APPPATH.css + '/*.css', APPPATH.root + '/*.html', APPPATH.js + '/*.js'], {
+//         server: {
+//             baseDir : APPPATH.root
+//         }
+//     })
+// });
+
+// Works
+function browserSync(done) {
+    browsersync.init([APPPATH.css + '/*.css', APPPATH.root + '/*.html', APPPATH.js + '/*.js'], {
         server: {
             baseDir : APPPATH.root
         }
-    })
-});
+    });
+    done();
+};
 
-// gulp.task('watch', function() {
-//     gulp.watch([SOURCEPATHS.sassSource]);
+
+/* DEPRECATED - REFERENCE ONLY */
+// gulp.task('watch', ['serve', 'sass'], function() {
+//     gulp.watch([SOURCEPATHS.sassSource], ['sass'])
 // });
 
-// watch([SOURCEPATHS.sassSource], ['serve', 'sass']);
 
-gulp.task('default', gulp.series('sass', 'serve', function() {
+// gulp.task('default', gulp.series('sass', 'serve')); //Works
 
-}));
-
-function watchTask() {
-    watchTask(
+function watchTask(done) {
+    watch(
         [SOURCEPATHS.sassSource],
-        parallel('serve', 'sass')
-    );
-}
-
-exports.default = series(
-    parallel(watchTask)
-);
+        series(browserSync, compileSass),
+        done()
+    )};
+    
 
 
+
+exports.compileSass = compileSass;
+exports.watchTask = watchTask;
+exports.browserSync = browserSync;
+exports.default = series(watchTask, browserSync, compileSass);
