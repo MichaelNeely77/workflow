@@ -1,7 +1,11 @@
 body {
-  background-color: purple;
+  background-color: navy;
 }
 
 h1 {
   color: red;
+}
+
+h1:hover {
+  transition: color 1s ease;
 }

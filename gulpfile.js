@@ -1,14 +1,15 @@
 const gulp = require('gulp');
 const sass = require('gulp-sass');
-const  browsersync = require('browser-sync');
+const browsersync = require('browser-sync');
 const autoprefixer = require('gulp-autoprefixer');
 const reload = browsersync.reload;
-const { series } = require('gulp');
-const { watch } = require('gulp');
+const { watch, series } = require('gulp');
+
 
 const SOURCEPATHS = {
     
-    sassSource : 'src/scss/*.scss'
+    sassSource : 'src/scss/*.scss',
+    htmlSource : 'src/*.html'
 }
 
 const APPPATH = {
@@ -30,6 +31,11 @@ function compileSass() {
         .pipe(autoprefixer())
         .pipe(sass({outputStyle: 'expanded'}).on('error', sass.logError))
         .pipe(gulp.dest(APPPATH.css))
+}
+
+function copyFiles() {
+    return gulp.src(SOURCEPATHS.htmlSource)
+        .pipe(gulp.dest(APPPATH.root))
 }
 
 
@@ -63,15 +69,18 @@ function browserSync(done) {
 
 function watchTask(done) {
     watch(
-        [SOURCEPATHS.sassSource],
-        series(browserSync, compileSass),
+        [SOURCEPATHS.sassSource], 
+        compileSass
+    ),
+    watch(
+        [SOURCEPATHS.htmlSource],
+        copyFiles,
         done()
     )};
     
 
-
-
 exports.compileSass = compileSass;
+exports.copyFiles = copyFiles;
 exports.watchTask = watchTask;
 exports.browserSync = browserSync;
-exports.default = series(watchTask, browserSync, compileSass);
+exports.default = series(watchTask, browserSync, compileSass, copyFiles);
