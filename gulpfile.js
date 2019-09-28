@@ -3,7 +3,7 @@ const sass = require('gulp-sass');
 const browsersync = require('browser-sync');
 const autoprefixer = require('gulp-autoprefixer');
 const reload = browsersync.reload;
-const { watch, series } = require('gulp');
+const { watch, series, parallel } = require('gulp');
 const clean = require('gulp-clean');
 
 
@@ -27,8 +27,8 @@ const APPPATH = {
 // });
 
 function cleanFiles(){
-    return gulp.src(APPPATH.root + '/*.html', {read: false, force:true})
-        .pipe(clean());
+    return gulp.src(APPPATH.root + '/*.html', {read:false, force:true})
+    
 }
 
 function compileSass() {
@@ -89,4 +89,4 @@ exports.copyFiles = copyFiles;
 exports.watchTask = watchTask;
 exports.browserSync = browserSync;
 exports.cleanFiles = cleanFiles;
-exports.default = series(watchTask, browserSync, compileSass, cleanFiles, copyFiles);
+exports.default = series(watchTask, browserSync, compileSass, parallel(copyFiles, cleanFiles));
