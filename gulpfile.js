@@ -27,9 +27,14 @@ const APPPATH = {
 // });
 
 function cleanFiles(){
-    return gulp.src(APPPATH.root + '/*.html', {read:false, force:true})
-    
+    return gulp.src(APPPATH.root + '/*.html', {read:false})
+    .pipe(clean({force:true}));
 }
+
+// gulp.task('clean-html', function() {
+//     return gulp.src(APPPATH.root + '/*.html', {read: false, force: true})
+//     .pipe(clean());
+// });
 
 function compileSass() {
     return gulp.src(SOURCEPATHS.sassSource)
@@ -79,7 +84,7 @@ function watchTask(done) {
     ),
     watch(
         [SOURCEPATHS.htmlSource],
-        copyFiles,
+        parallel(copyFiles, cleanFiles),
         done()
     )};
     
