@@ -10,7 +10,8 @@ const clean = require('gulp-clean');
 const SOURCEPATHS = {
     
     sassSource : 'src/scss/*.scss',
-    htmlSource : 'src/*.html'
+    htmlSource : 'src/*.html',
+    jsSource : 'src/js/*.js'
 }
 
 const APPPATH = {
@@ -31,10 +32,15 @@ function cleanFiles(){
     .pipe(clean({force:true}));
 }
 
-// gulp.task('clean-html', function() {
-//     return gulp.src(APPPATH.root + '/*.html', {read: false, force: true})
-//     .pipe(clean());
-// });
+function cleanScripts(){
+    return gulp.src(APPPATH.root + '/*.js', {read:false})
+    .pipe(clean({force:true}));
+}
+
+function scripts() {
+    return gulp.src(SOURCEPATHS.jsSource)
+    .pipe(gulp.dest(APPPATH.root))
+}
 
 function compileSass() {
     return gulp.src(SOURCEPATHS.sassSource)
@@ -84,7 +90,11 @@ function watchTask(done) {
     ),
     watch(
         [SOURCEPATHS.htmlSource],
-        parallel(copyFiles, cleanFiles),
+        parallel(copyFiles, cleanFiles)
+    ),
+    watch(
+        [SOURCEPATHS.jsSource],
+        parallel(scripts, cleanScripts),
         done()
     )};
     
@@ -94,4 +104,6 @@ exports.copyFiles = copyFiles;
 exports.watchTask = watchTask;
 exports.browserSync = browserSync;
 exports.cleanFiles = cleanFiles;
-exports.default = series(watchTask, browserSync, compileSass, parallel(copyFiles, cleanFiles));
+exports.scripts = scripts;
+exports.cleanScripts = cleanScripts;
+exports.default = series(watchTask, browserSync, compileSass, parallel(scripts, cleanScripts), parallel(copyFiles, cleanFiles));
