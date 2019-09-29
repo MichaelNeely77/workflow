@@ -55,7 +55,7 @@ function compileSass() {
         .pipe(sass({outputStyle: 'expanded'}).on('error', sass.logError))
 
         return merge(sassFiles, bootstrapCSS)
-        .pipe(concat('app.css'))
+        .pipe(concat('css/app.css'))
         .pipe(gulp.dest(APPPATH.css))
 }
 
