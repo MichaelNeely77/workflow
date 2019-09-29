@@ -4,6 +4,7 @@ const browsersync = require('browser-sync');
 const autoprefixer = require('gulp-autoprefixer');
 const reload = browsersync.reload;
 const { watch, series, parallel } = require('gulp');
+const browserify = require('gulp-browserify');
 const clean = require('gulp-clean');
 const concat = require('gulp-concat');
 
@@ -33,14 +34,16 @@ function cleanFiles(){
     .pipe(clean({force:true}));
 }
 
-function cleanScripts(){
+function cleanScripts(done){
     return gulp.src(APPPATH.root + '/*.js', {read:false})
-    .pipe(clean({force:true}));
+    .pipe(clean({force:true}))
+    done();
 }
 
 function scripts() {
     return gulp.src(SOURCEPATHS.jsSource)
-    .pipe(concat('main.js'))
+    .pipe(concat('js/main.js'))
+    .pipe(browserify())
     .pipe(gulp.dest(APPPATH.root))
 }
 

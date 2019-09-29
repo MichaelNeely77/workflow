@@ -22,11 +22,18 @@
   },
   "homepage": "https://github.com/MichaelNeely77/workflow#readme",
   "devDependencies": {
+    "bootstrap": "^4.3.1",
     "browser-sync": "^2.26.7",
     "gulp": "^4.0.2",
     "gulp-autoprefixer": "^7.0.0",
+    "gulp-browserify": "^0.5.1",
     "gulp-clean": "^0.4.0",
     "gulp-concat": "^2.6.1",
-    "gulp-sass": "^4.0.2"
+    "gulp-sass": "^4.0.2",
+    "jquery": "^3.4.1",
+    "mustache": "^3.1.0"
+  },
+  "dependencies": {
+    "popper.js": "^1.15.0"
   }
 }
