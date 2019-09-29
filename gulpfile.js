@@ -7,6 +7,7 @@ const { watch, series, parallel } = require('gulp');
 const browserify = require('gulp-browserify');
 const clean = require('gulp-clean');
 const concat = require('gulp-concat');
+const merge = require('merge-stream');
 
 
 const SOURCEPATHS = {
@@ -48,9 +49,13 @@ function scripts() {
 }
 
 function compileSass() {
-    return gulp.src(SOURCEPATHS.sassSource)
+    const bootstrapCSS = gulp.src('./node_modules/bootstrap/dist/css/bootstrap.css');
+    const sassFiles =  gulp.src(SOURCEPATHS.sassSource)
         .pipe(autoprefixer())
         .pipe(sass({outputStyle: 'expanded'}).on('error', sass.logError))
+
+        return merge(sassFiles, bootstrapCSS)
+        .pipe(concat('app.css'))
         .pipe(gulp.dest(APPPATH.css))
 }
 
