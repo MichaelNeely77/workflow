@@ -54,8 +54,8 @@ function compileSass() {
         .pipe(autoprefixer())
         .pipe(sass({outputStyle: 'expanded'}).on('error', sass.logError))
 
-        return merge(sassFiles, bootstrapCSS)
-        .pipe(concat('css/app.css'))
+        return merge(bootstrapCSS, sassFiles)
+        .pipe(concat('app.css'))
         .pipe(gulp.dest(APPPATH.css))
 }
 
