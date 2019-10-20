@@ -8,19 +8,24 @@ const browserify = require('gulp-browserify');
 const clean = require('gulp-clean');
 const concat = require('gulp-concat');
 const merge = require('merge-stream');
+const newer = require('gulp-newer');
+const imagemin = require('gulp-imagemin');
 
 
 const SOURCEPATHS = {
     
     sassSource : 'src/scss/*.scss',
     htmlSource : 'src/*.html',
-    jsSource : 'src/js/*.js'
+    jsSource : 'src/js/*.js',
+    imgSource : 'src/img/**'
 }
 
 const APPPATH = {
     root : 'app/',
     css : 'app/css',
-    js : 'app/js'
+    js : 'app/js',
+    img : 'app/img'
+    
 }
 // Works
 // gulp.task('sass', function() {
@@ -57,6 +62,13 @@ function compileSass() {
         return merge(bootstrapCSS, sassFiles)
         .pipe(concat('app.css'))
         .pipe(gulp.dest(APPPATH.css))
+}
+
+function images () {
+    return gulp.src(SOURCEPATHS.imgSource)
+    .pipe(newer(APPPATH.img))
+    .pipe(imagemin())
+    .pipe(gulp.dest(APPPATH.img))
 }
 
 function copyFiles() {
@@ -118,4 +130,5 @@ exports.browserSync = browserSync;
 exports.cleanFiles = cleanFiles;
 exports.scripts = scripts;
 exports.cleanScripts = cleanScripts;
-exports.default = series(watchTask, browserSync, compileSass, parallel(scripts, cleanScripts), parallel(copyFiles, cleanFiles));
+exports.images = images;
+exports.default = series(watchTask, browserSync, compileSass, images, parallel(scripts, cleanScripts), parallel(copyFiles, cleanFiles));
