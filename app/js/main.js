@@ -18379,9 +18379,11 @@ return Popper;
 function sayHello() {
     alert('Say Hello!');
 }
-$(document).ready(function() {
-    alert("It works!");
-});
+// $(document).ready(function() {
+//     alert("It works!");
+// });
+
+
 global.jQuery = require('jquery');
 bootstrap = require('bootstrap');
 mustache = require('mustache');

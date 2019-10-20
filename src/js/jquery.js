@@ -1,3 +1,4 @@
-$(document).ready(function() {
-    alert("It works!");
-});
+// $(document).ready(function() {
+//     alert("It works!");
+// });
+
