@@ -37,7 +37,7 @@
     "mustache": "^3.1.0"
   },
   "dependencies": {
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.21",
     "lodash.template": "^4.5.0",
     "popper.js": "^1.15.0"
   }
